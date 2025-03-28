@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASX Stock Valuation</title>
+    <script>
+        async function fetchStockData() {
+            // Replace this with a real ASX API endpoint
+            let stocks = ["CBA.AX", "BHP.AX", "TLS.AX"];
+            let apiKey = "8e5bb90d781e9d6e9f4eca10caa93718";
+            let stockData = {};
+
+            for (let stock of stocks) {
+                let response = await fetch(`https://api.marketstack.com/v1/eod/latest?access_key=${apiKey}&symbols=${stock}`);
+                let data = await response.json();
+                stockData[stock] = data.data[0]?.close || "N/A";
+            }
+            
+            updateTable(stockData);
+        }
+
+        function updateTable(stockData) {
+            let valuations = { "CBA.AX": 95, "BHP.AX": 45, "TLS.AX": 4.5 }; // Replace with your calculated values
+            let table = document.getElementById("stockTable");
+            table.innerHTML = "<tr><th>Stock</th><th>Market Price</th><th>Valuation</th><th>Status</th></tr>";
+            
+            for (let stock in valuations) {
+                let marketPrice = stockData[stock] || "Loading...";
+                let valuation = valuations[stock];
+                let status = (marketPrice !== "N/A" && marketPrice < valuation) ? "Undervalued ✅" : "Overvalued ❌";
+                
+                table.innerHTML += `<tr><td>${stock}</td><td>${marketPrice}</td><td>${valuation}</td><td>${status}</td></tr>`;
+            }
+        }
+    </script>
+</head>
+<body onload="fetchStockData()">
+    <h1>ASX Stock Valuation</h1>
+    <table border="1" id="stockTable">
+        <tr>
+            <th>Stock</th>
+            <th>Market Price</th>
+            <th>Valuation</th>
+            <th>Status</th>
+        </tr>
+    </table>
+</body>
+</html>
