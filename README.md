@@ -8,7 +8,7 @@
         async function fetchStockData() {
             // Replace this with a real ASX API endpoint
             let stocks = ["CBA.AX", "BHP.AX", "TLS.AX"];
-            let apiKey = "YOUR_API_KEY_HERE"; // You need to sign up for an API
+            let apiKey = "8e5bb90d781e9d6e9f4eca10caa93718";
             let stockData = {};
 
             for (let stock of stocks) {
